@@ -1,0 +1,217 @@
+一、Object、常用API
+1、toString方法：打印对象的信息，重写前打印的是包名类名@地址值，重写后打印的是对象中的属性值
+2、Object类中的equals方法：比较两个对象是否相等，重写前比较地址值，重写后比较对象的属性值（需要在构造方法中重写）
+3、Objects类中的equals方法：比较对象是否相等，更健壮可以null.equals(s2);
+4、日期转文本：SimpleDateFormat(String pattern)用给定的模式和默认语言环境的日期格式符号构造
+	y  年；M  月；  d  日；H  时；m  分；s  秒  如："yyy-MM-dd HH:mm;ss"
+	         SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分ss秒");
+	         Date date = new Date();
+	        String text = sdf.format(date);
+5、文本转日期：SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分ss秒");
+	         Date date = sdf.parse("2020年06月27日 10时19分10秒");
+	         System.out.println(date);
+6、Calendar类日历类，是一个抽象类，其中有一个静态方法getInstance()返回了Calendar类的子类对象
+	Calendar c = Calendar.getInstance();//多态
+	System.out.println(c);
+	获取指定日历字段信息：int get(int n);
+	将指定日历字段设置为指定的值：void  set(int n, int value);
+	将指定日历字段增加或减少指定的值：void add(int n , int value);
+7、System类：public static long currentTimeMillis():返回以毫秒为单位的当前时间
+	       public static void arraycopy(Object src,int serPos,Object dest, int destPos, int length):将数组中指定的数据拷贝到另一个数组中
+		其中：src-源数组；srcPos-源数组中的起始位置；dest-目标数组；destPos-目标数组中的起始位置；length-要复制的数组元素数量
+8、StringBuilder类：常用的两个构造方法：
+	public StringBuilder(): 构造一个空的StringBuilder容器
+	public StringBuilder(String str): 构造一个StringBuilder容器，并将字符串添加进去
+常用两个方法：public StringBuilder append(...) : 添加任意类型数据的字符串形式，并返回当前对象自身；append方法无需接收返回值；
+		a.append("a").append("b").append("c")
+	       public String toString(): 将当前StringBuilder对象转换为String对象
+9、装箱与拆箱
+	装箱：从基本类型转换为对应的包装类对象		Integer i = new Integer(4);//构造函数 Integer i2 = Integer.valueOf(4)
+	拆箱：从包装类对象转换为对应的基本类型		int num = i.intValue();
+10、自动装箱与自动拆箱
+	自动装箱：基本类型直接赋值给包装类
+	自动拆箱：自动转换为基本类型的数据
+11、基本类型-->字符串三种方法：
+	基本类型数据的值+""
+	static String toString(int i) 返回一个表示指定整数的String对象
+	static String valueOf(int i) 返回int参数的字符串表示形式
+12、字符串-->基本类型：
+	使用包装类的静态方法parseXX("字符串")
+	Integer类：static int parseInt(String s)
+
+
+
+二、Collection、泛型
+1、Collection接口（单列集合最顶层接口）分为List接口和Set接口；
+	List接口：有序的集合（存储和取出元素顺序相同），允许存储重复的元素，有索引可以用for遍历
+		包含Vector集合，ArrayList集合，LinkedList集合
+	Set接口：不允许存储重复元素，没有索引
+		包含TreeSet集合，HashSet集合，LinkedHashSet集合
+2、List集合：有索引、可以存储重复元素、可以保证存取顺序
+     ArrayList：底层是数组实现的，查询快、增删慢
+     LinkedList：底层是链表实现的，查询慢、增删快
+3、Set集合：无索引、不能存储重复元素，存取无序
+     HashSet：底层是哈希表+（红黑树）实现的，无索引、不能存储重复元素、存取无序
+     LinkedHashSet：底层是哈希表+链表实现的、无索引、不能存储重复元素、可以保证存取顺序
+     TreeSet：底层是二叉树实现、一般用于排序
+4、Collection常用方法
+	boolean add(E e)		添加元素
+	boolean remove(E e)	删除某个元素
+	void clear()		清空集合
+	boolean contains(E e)	判断集合中是否包含某个元素
+	boolean isEmpty()		判断是否为空
+	int size()			获取集合长度
+	Object[] toArray()		将集合转成一个数组
+5、迭代器Iterator（对集合进行遍历）
+	迭代：COllection集合元素的通用获取方式。在取元素之前先判断集合中有没有元素，如果有就把这个元素取出来，继续判断，还有就再取。一直到取出所有元素，这种方式成为迭代
+	有两个常用方法：boolean hasNext() 如果仍有元素可以迭代，则放回true	E next() 返回迭代的下一个元素
+6、迭代器的使用步骤：
+	使用Collection集合中的方法iterator()获取迭代器的实现类对象，使用Iterator接口接收(多态)
+	使用Iterator接口中的方法hasNext判断是否存在下一个元素
+	使用next方法取出集合中的下一个元素
+while(it.hasNext()){
+	System.out.println(it.next());
+7、foreach方法：底层也是迭代器，jdk1.5之后新特性，用来遍历集合和数组。
+格式：for(集合/数组的数据类型  变量名 ： 集合名/数组名){
+	sout(变量名);
+}
+如：	int[] arr = {1, 2, 3, 4, 5};
+	for(int i : arr){
+		System.out.println(i);
+8、泛型的上限限定：? extends E  代表使用的泛型只能是E的子类或其本身
+     泛型的下限限定： ? super E  代表使用的泛型只能是E的父类或其本身
+
+
+
+三、List、Set、Collecions
+1、List接口中特有的带索引的方法：
+	public void add(int index , E element) 将指定的元素，添加到指定位置
+	public E get (int index) 返回集合中指定位置的元素
+	public E remove(int index) 基础列表中指定位置的元素，返回被移除的元素
+	public E set(int index , E element) 用指定元素替换集合中指定位置的元素
+2、哈希值：是一个十进制的整数，由系统随即给出（对象的地址值，是一个逻辑地址，是模拟出来的地址，不是实际存储的物理地址）
+	int hashCode()放回该对象的哈希码值  源码：public native int hashCode();调用的是本地操作系统的方法
+3、使用HashSet存储自定义类型元素，需要重写对象中的hashCode和equals方法，建立自己的比较方式，才能保证HashSet集合中对象唯一
+4、LinkedHashSet集合继承了HashSet集合，底层是一个哈希表（数组+链表/红黑树），多了一条链表，记录元素的存储顺序，保证元素有序
+5、Collections常用方法：
+	public static <T> boolean addAll(Collection<T> c, T ... elements) 往集合中添加一些元素
+	public static void shuffle(List<?> list> 打乱集合顺序
+	public static <T> void sort(List <T> list) 将集合中的元素按照默认规则排序	必须实现Comparable接口，重写compareTo方法
+		@Override
+		public int compareTo(Person o){
+			return o.getAge() - this.getAge();//降序
+		}
+	
+	public static <T> void sort(List <T> list, Coparator<? super T> 按照指定规则排序
+		o1 - o2 升序；o2 - o1 降序
+
+
+四、Map
+1、Map集合的特点：键值对的形式，key和value的数据类型可以相同也可以不同，key不能重复而value可以重复，key和value一一对应
+2、Map常用子类：	HashMap<K,V> 存储数据采用哈希表结构，元素的存取顺序不能保证一致，由于要保证键的唯一不重复，必须重写键的hashCode()方法和equals()方法
+		LinkedHashMap<K,V> HashMap的子类，存储数据采用的哈希表+链表结构，通过链表结构可以保证元素存取顺序一致，需要重写hashCode()方法和equals()方法
+3、Map接口中的常用方法：	public V put(K key, V value):把指定的键与指定的值添加到Map集合中
+			public V remove(Object key):把指定的键所对应的键值对元素在Map集合中删除，返回被删除元素的值
+			public V get(Object key):根据指定的键，在Map集合中获取对应的值
+			public Set<K> keySet(): 获取Map集合中所有的键，存储到Set集合中
+			public Set< Map.Entry<K,V> > entrySet():获取到Map集合中所有的键值对对象的集合（Set集合）
+4、HashMap存储自定义类型键值：Map集合保证key是唯一的，作为key的元素，必须重写hashCode方法和equals方法
+5、jdk9在List接口、Set接口、Map接口中增加了静态方法of，用于给集合一次性添加多个元素
+	static <E> List <E> of (E ... elements)
+	前提：集合中存储的元素个数确定
+	注意事项：不适用于接口的实现类，不能再用add、put方法添加元素，Set接口和Map接口在调用of方法的时候不能有重复元素
+五、异常
+1、异常：本身是一个类，产生异常就是创建异常对象并抛出一个异常，Java处理异常的方式是中断处理。异常的根类是java.lang.Throwable，有Exception和Error两个子类
+2、判断参数是否为空：Objects.requireNonNull(obj);
+3、throw关键字：在指定方法中抛出指定的异常。throw new xxxException("   ");
+4、throws关键字：声明异常，格式为： 修饰符 返回值类型 方法名（参数） throws 异常类名1，异常类名2...{}
+	如：public static void main(String[] args) throws FileNotFoundException{
+		read ("a.txt");
+	       } 
+throws方法会把异常抛出给方法的调用者处理，最终交给jvm做中断处理，故不会运行异常后续代码
+5、try...catch:自己处理异常
+	try{
+		可能出现异常的代码
+	}catch(定义一个异常的变量，用来接收try中抛出的异常对象){
+		工作中会把异常的信息记录到log中
+	}
+6、Throwable类中三个异常处理的方法：
+	public String getMessage() 获取异常的描述信息和原因
+	public String toString() 获取异常的类型和异常描述信息（用不上）
+	public void printStackTrance() 打印异常的跟踪栈信息并输出到console 包含了异常的类型、原因、出现的位置。在开发和调试阶段都会使用printStackTrance
+7、catch(子类)必须写在catch(父类)之前
+8、如果finally中有return语句，永远返回finally中的结果，要避免
+
+
+六、多线程
+1、并发和并行
+	并发：指两个或多个事件在同一个时间段内发生
+	并行：指两个或多个时间在同一时刻发生
+2、进程和线程
+	进程：是指一个内存中运行的应用程序，每个进程都有一个独立的内存空间，一个应用程序可以同时运行多个进程，进程也是程序的一次执行过程，
+		是系统运行程序的基本单位，系统运行一个程序就是一个进程从创建、运行到消亡的过程
+	线程：进程中的一个执行单元，负责当前进程中程序的执行，一个进程中至少有一个线程，一个进程中可以有多个线程。
+3、线程调度
+	分时调度：所有线程轮流使用CPU的使用权，平均分配每个线程占用CPU的时间
+	抢占式调度：优先让优先级高的线程使用CPU，Java使用的是抢占式调度
+4、Thread类中的方法：
+	构造方法：
+	public Thread():分配一个新的线程对象
+	public Thread(String name)：分配一个指定名字的新的线程对象
+	public Thread(Runnable target)：分配一个带有指定目标新的线程对象
+	public Thread(Runnable target,String name)：分配一个带有指定目标新的线程对象并指定名字
+	常用方法：
+	public String getName()获取当前线程名字
+	public void start()导致此线程开始执行，Java虚拟机调用此线程的run方法
+	public void run()此线程要执行的任务在此处定义代码
+	public static void sleep(long millis)使当前正在执行的线程以指定的毫秒数暂停
+	public static Thread currentThread()返回对当前正在执行的线程对象的引用
+5、Runnable接口的好处：
+	避免了单继承的局限性；
+	增强了程序的扩展性，降低了耦合性，实现接口，把设置线程任务和开启新线程进行了分离；实现类中重写了run方法用来设置线程任务，创建Thread对象调用start方法用来开启新线程
+6、匿名内部类实现线程创建：
+public void f1(){
+	new Thread(new Runnable(){
+		public void run(){
+			sout();
+		}
+	}).start();
+}
+7、同步代码块：	synchronized(同步锁){需要同步操作的代码}
+8、同步方法：使用synchronized修饰的方法，如	public synchronized void method(){可能产生线程安全问题的代码}
+9、静态的同步方法：锁对象不是this，因为this是创建对象后产生的，而静态方法优先于对象；锁对象是本类的class属性
+10、Lock锁：java.util.concurrent.locks.Lock 比synchronized代码块和方法更加广泛
+public void lock()加锁
+public void unlock()释放锁
+使用步骤：成员位置创建一个ReentrantLock对象，在可能出现安全问题的代码前调用Lock接口中的方法获取锁，在其后调用unlock方法释放锁
+11、线程的状态：
+new 尚未启动的线程处于此状态
+runnable 正在jvm中执行的线程处于此状态
+blocked （阻塞状态） 受阻塞并等待某个监视器锁的线程处于此状态
+waiting （无限等待状态） 无限期地等待另一个线程来执行某一特定操作的线程处于此状态
+timed waiting （休眠状态） 等待另一个线程来执行取决于指定等待时间的操作的线程处于此状态
+terminated （死亡状态） 已退出的线程处于此状态
+12、线程池的使用
+	使用线程池的工厂类Executors中的静态方法newFixedThreadPool生产一个指定数量的线程池；
+	创建一个类实现Runnable接口，重写run方法，设置线程任务；
+	调用ExecutorService中的submit方法，传递任务（实现类），开启线程执行run方法
+
+
+
+七、File类
+1、创建删除：
+	public boolean createNewFile() 创建一个新文件
+	public boolean delete() 删除此File表示的文件或目录
+	public booean mkdir() 创建由此file表示的目录
+	public boolean mkdirs() 创建此file表示的目录，包括任何必需但不存在的父目录
+2、目录的遍历：
+	public String[] list() 返回一个String数组，表示该File目录中所有子文件或目录
+	public File[] listFiles() 返回一个File数组，表示改File目录中的所有子文件或目录
+
+
+
+
+
+
+
+
